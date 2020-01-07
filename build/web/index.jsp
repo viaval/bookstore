@@ -13,13 +13,12 @@
 <body>
 
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Книжный магазин "КНИГОЛЮБ"</title>
+        <title>RAAMATUD KAUPLUS  "Rahva Raamat"</title>
     </head>
     <body>
-        <h1>Книжный магазин "КНИГОЛЮБ"</h1>
-        <p>"Просто читай, и пусть слова ласкают твой слух, словно музыка."<br>
-        <a href="http://www.e-reading.club/book.php?book=1025615">Роальд Даль «Матильда»</a></p>
-           <p>${info}</p>
+        <h1>RAAMATUD KAUPLUS  "Rahva Raamat"</h1>
+        
+            <p>${info}</p>
               <a href="showLogin">Вход</a><br>
               <br>
               <a href="showShopper">Зарегистрировать покупателя</a><br>
@@ -30,8 +29,6 @@
               <br>
               <a href="listShoppers">Список покупателей</a><br>
               <br>
-              <a href="showOrderBook">Добавить книгу в корзину</a><br>
-              <br>
-              <a href="showBuyBook">Книга продана</a><br>
+              <a href="showBuyBook">Купить книгу</a><br>
     </body>
 </html>

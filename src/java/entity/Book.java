@@ -39,6 +39,7 @@ public class Book implements Serializable {
         this.year = year;
         this.price = price;
         this.quantity = quantity;
+        this.count = this.quantity;
     }
 
     

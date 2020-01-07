@@ -73,7 +73,7 @@ public class BookServlet extends HttpServlet {
             case "/login":
                 String login = request.getParameter("login");
                 String password = request.getParameter("password");
-                if("Tatjana".equals(login) && "Oborina".equals(password)){
+                if("Valentina".equals(login) && "Vileito".equals(password)){
                     request.setAttribute("info", "Привет, "+login+"!");
                 }else{
                     request.setAttribute("info", "Неправильный логин или пароль!");
@@ -98,7 +98,8 @@ public class BookServlet extends HttpServlet {
                         genre, 
                         Integer.parseInt(year), 
                         Integer.parseInt(price), 
-                        Integer.parseInt(quantity));
+                        Integer.parseInt(quantity)
+                );
                 bookFacade.create(book);
                 request.setAttribute("info", "Книга добавлена");
                 request.getRequestDispatcher("/index.jsp")
@@ -156,7 +157,6 @@ public class BookServlet extends HttpServlet {
                 historyFacade.create(history);
                 request.setAttribute("info",
                         "Книга \""
-                                
                         +book.getTitle()
                         +"\" выбрана и добавлена в карзину покупателя: "
                         +shopper.getName()
@@ -165,9 +165,57 @@ public class BookServlet extends HttpServlet {
                 request.getRequestDispatcher("/index.jsp")
                         .forward(request, response);
                 break;
-            
-                
-           
+            case "/showBuyBook":
+                listBooks=bookFacade.findAll();
+                request.setAttribute("listBooks", listBooks);
+                listShoppers=shopperFacade.findAll();
+                request.setAttribute("listShoppers", listShoppers);
+                request.getRequestDispatcher("/showBuyBook.jsp")
+                        .forward(request, response);
+                break;
+            case "/buyBook":
+                shopperId = request.getParameter("shopperId");
+                bookId = request.getParameter("bookId");
+                String countStr = request.getParameter("count");
+                int count;
+                if(countStr == null || "".equals(countStr)){
+                    count = 1;
+                }else{
+                    count = Integer.parseInt(countStr);
+                }
+                shopper = shopperFacade.find(new Long(shopperId));
+                book = bookFacade.find(Long.parseLong(bookId));
+                if(shopper.getMoney()-book.getPrice()*count >= 0){
+                    if(book.getCount()-count >= 0){
+                        shopper.setMoney(shopper.getMoney()-book.getPrice());
+                        shopperFacade.edit(shopper);
+                        book.setCount(book.getCount()-count);
+                        bookFacade.edit(book);
+                        shopper.setMoney(shopper.getMoney()-book.getPrice());
+                        shopperFacade.edit(shopper);
+                        Calendar c = new GregorianCalendar();
+                        history = new History(null, shopper, book, c.getTime(), count);
+                        historyFacade.create(history);
+                        
+                        request.setAttribute("info",
+                        "Книга \""
+                        +book.getTitle()
+                        +"\" продана ");
+                    }else{
+                        request.setAttribute("info", "К сожалению, книга уже продана");
+                        request.getRequestDispatcher("/index.jsp")
+                                .forward(request, response); 
+                        break;
+                    }
+                }else{
+                    request.setAttribute("info", "Вы не можете заплатить за покупку, не достаточно денег");
+                    request.getRequestDispatcher("/index.jsp")
+                                .forward(request, response); 
+                        break;
+                }
+                request.getRequestDispatcher("/index.jsp")
+                        .forward(request, response); 
+                break;
         }
     }
 
